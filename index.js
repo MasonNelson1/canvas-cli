@@ -99,7 +99,12 @@ async function main() {
       console.log("Error: Missing course ID. Usage: node index.js assignments <courseId>");
       return;
     }
+    
+  if (args[0] === "all") {
 
+  const assignments = await getAllAssignments();
+  printAllAssignments(assignments);
+}
     const assignments = await getAssignments(courseId);
     printAssignments(assignments);
   }
