@@ -19,10 +19,18 @@ const api = axios.create({
 
 async function getCourses() {
   try {
-    const res = await api.get("/api/v1/courses");
-    return res.data;
+
+    const res = await api.get("/api/v1/courses", {
+      params: {
+        enrollment_state: "active",
+        per_page: 100
+      }
+    });
+
+    return res.data.filter(c => c.name);
+
   } catch (err) {
-    console.error("Error fetching courses:", err.message);
+    console.error("Error fetching courses");
     process.exit(1);
   }
 }
