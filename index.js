@@ -40,9 +40,14 @@ async function getAssignments(courseId) {
 function printCourses(courses) {
   console.log(chalk.blue("\nYour Courses:\n"));
 
-  courses.forEach(course => {
-    console.log(`${course.id} - ${course.name}`);
-  });
+  courses
+    .filter(c => c.name || c.course_code)
+    .forEach(course => {
+
+      const name = course.name || course.course_code || "Unnamed Course";
+
+      console.log(`${course.id} - ${name}`);
+    });
 }
 
 function printAssignments(assignments) {
