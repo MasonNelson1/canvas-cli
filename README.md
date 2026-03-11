@@ -1,137 +1,178 @@
-Canvas Assignment Tracker CLI
+# Canvas Assignment Tracker CLI
 
-A command-line interface (CLI) tool that connects to the Canvas LMS REST API to help students quickly view their courses and upcoming assignments directly from the terminal.
+A command-line interface (CLI) tool that connects to the Canvas LMS API to help students quickly view their courses and upcoming assignments directly from the terminal.
 
-This tool retrieves courses and assignments from Canvas and presents them in a readable, color-coded format that highlights upcoming deadlines. Instead of navigating multiple pages in the Canvas web interface, students can quickly see what assignments are due soon using simple terminal commands.
+This tool retrieves courses and assignments from Canvas and displays them in a simple, readable format. Instead of navigating through multiple pages in the Canvas web interface, users can quickly check their assignments and deadlines from the command line.
 
-Demo
+---
 
-The GIF above demonstrates listing courses, viewing assignments for a course, and displaying all upcoming assignments across courses.
+## Demo
 
-Setup Instructions
+![Demo](assets/demo.gif)
 
-Follow these steps to install and run the CLI tool.
+The demo above shows listing courses, viewing assignments for a course, and displaying assignments across all courses.
 
-1. Clone the Repository
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/MasonNelson1/canvas-cli
 cd canvas-cli
-2. Install Dependencies
+```
 
-This project uses Node.js and npm.
+### 2. Install Dependencies
 
+```bash
 npm install
-3. Generate a Canvas API Token
+```
 
-Log into Canvas.
+### 3. Generate a Canvas API Token
 
-Open Account Settings.
+1. Log into Canvas.
+2. Go to **Account Settings**.
+3. Scroll to **Approved Integrations**.
+4. Click **+ New Access Token**.
+5. Give it a name like `Canvas CLI`.
+6. Generate the token and copy it.
 
-Scroll to Approved Integrations.
+### 4. Create a `.env` File
 
-Click + New Access Token.
-
-Enter a description (example: Canvas CLI Project).
-
-Generate the token and copy it immediately.
-
-4. Create Your .env File
-
-Create a file named .env in the root directory.
+Create a file called `.env` in the root directory.
 
 Example:
 
-CANVAS_API_TOKEN=your_canvas_token_here
+```
+CANVAS_API_TOKEN=your_canvas_api_token_here
 CANVAS_BASE_URL=https://boisestatecanvas.instructure.com
+```
 
-Your .env file contains sensitive information and must never be committed to GitHub.
+The `.env` file stores your secret token and **should never be pushed to GitHub**.
 
-5. Run the CLI Tool
+---
 
-You can now run the application using Node.
+## Usage
 
-Example:
+### List Your Canvas Courses
 
+```bash
 node index.js courses
-Example Commands
-List your Canvas courses
-node index.js courses
+```
 
 Example Output:
 
+```
 Your Courses:
 
 27618 - Embedded Systems
 8147 - Engineering Student Shop
 13941 - COEN Undergrad Students
-Show assignments for a specific course
+```
+
+---
+
+### View Assignments for a Course
+
+```bash
+node index.js assignments <course_id>
+```
+
+Example:
+
+```bash
 node index.js assignments 27618
+```
 
 Example Output:
 
+```
 Assignments:
 
 Lab 6
-  Due: Mar 14, 11:59 PM
+Due: Mar 14, 11:59 PM
 
 Homework 5
-  Due: Mar 18, 11:59 PM
-Show all assignments across all courses
+Due: Mar 18, 11:59 PM
+```
+
+---
+
+### View Assignments Across All Courses
+
+```bash
 node index.js all
+```
 
 Example Output:
 
+```
 Upcoming Assignments
 
 Lab 6
-  Course: Embedded Systems
-  Due: Mar 14, 11:59 PM
+Course: Embedded Systems
+Due: Mar 14, 11:59 PM
 
 Homework 5
-  Course: Computer Networks
-  Due: Mar 18, 11:59 PM
+Course: Computer Networks
+Due: Mar 18, 11:59 PM
+```
 
-Assignments due soon are color-coded for urgency in the terminal.
+Assignments due soon may appear highlighted in the terminal.
 
-API Endpoints Used
+---
 
-The CLI communicates with the Canvas LMS REST API using the following endpoints:
+## API Endpoints Used
 
-Endpoint	Description
-/api/v1/courses	Retrieves a list of courses the user is enrolled in
-/api/v1/courses/:id/assignments	Retrieves assignments for a specific course
+The application uses the Canvas REST API.
 
-These endpoints allow the CLI to fetch course information and assignment data, which is then formatted for display in the terminal.
+| Endpoint | Purpose |
+|--------|--------|
+| `/api/v1/courses` | Retrieves courses the user is enrolled in |
+| `/api/v1/courses/:id/assignments` | Retrieves assignments for a specific course |
 
-Reflection
+These endpoints allow the CLI to gather course and assignment information from Canvas and present it in the terminal.
 
-This project provided hands-on experience working with a real-world REST API and integrating it into a command-line application. One of the most important things I learned was how token-based authentication works when interacting with third-party APIs. By generating a Canvas API token and storing it in an environment variable, I was able to securely authenticate requests without exposing sensitive information in the code repository. I also gained experience making HTTP requests from Node.js and parsing JSON responses into a format that could be displayed in the terminal.
+---
 
-Another valuable aspect of this project was learning how to handle errors and unexpected data from an API. The Canvas API sometimes returns courses that do not have assignments or contain missing fields, so the CLI needed to handle those situations gracefully without crashing. I implemented filtering and fallback logic so that the program would still display useful information even if certain data fields were missing.
+## Reflection
 
-If I had more time to expand this tool, I would add additional features such as filtering assignments by due date, exporting assignment lists to a file, or integrating the Canvas TODO endpoint to display a combined task list. I would also consider adding more advanced CLI features such as argument parsing libraries or table-based output formatting to make the interface even more user-friendly.
+This project gave me practical experience working with a real-world REST API and building a command-line application using Node.js. One important concept I learned was how APIs use authentication tokens to securely access user data. By generating a Canvas API token and storing it in an environment variable, the program can authenticate requests without exposing sensitive credentials in the source code.
 
-Security
+Another key learning experience involved handling inconsistent API data. Some courses returned by the Canvas API may not contain assignments or may include incomplete fields. Because of this, the program needed error handling and fallback logic to prevent crashes and still display useful information to the user.
 
-This project uses environment variables to protect sensitive information.
+If I continued developing this project, I would add features such as filtering assignments by due date, displaying assignments due within a certain number of days, and exporting assignments to a file. I would also improve the CLI interface with more advanced command parsing and better formatting for terminal output.
 
-Files excluded from version control:
+---
 
+## Security
+
+Sensitive data is stored in environment variables.
+
+The following files are ignored by Git:
+
+```
 .env
 node_modules
+```
 
-The repository includes a .env.example file to demonstrate the required configuration without exposing real tokens.
+The repository includes a `.env.example` file to show the required environment variables without exposing real tokens.
 
-Technologies Used
+---
 
-Node.js
+## Technologies Used
 
-Axios
+- Node.js  
+- Axios  
+- dotenv  
+- Chalk  
 
-dotenv
+---
 
-Chalk
+## Author
 
-Author
+Mason Nelson  
+Computer Engineering Student  
 
-Mason Nelson
-Computer Engineering Student
+---
